@@ -18,75 +18,51 @@ const slides = [
   },
 ];
 
+const arrowLeft = document.querySelector(".arrow_left");
+const arrowRight = document.querySelector(".arrow_right");
+const actuelBullet = document.querySelector(".dots .dot_selected");
+const boxImage = document.querySelector(".banner-img");
+const taglineImage = document.querySelector("#banner p");
+let currentIndex = 0;
+
 //Cette fonction ajoute les bullets de base
 function add_bulletPoints(images) {
   const numberImg = images.length;
   const dots = document.querySelector(".dots");
   let bulletsContent = "";
   for (let i = 0; i < numberImg; i++) {
-    bulletsContent += `<div class="dot" id="${i}"></div>`;
+    bulletsContent += `<div class="dot" id="dot${i}"></div>`;
   }
   dots.innerHTML = bulletsContent;
   const imageSelected = document.querySelector(".dots .dot");
   imageSelected.classList.add("dot_selected");
 }
 
+arrowLeft.addEventListener("click", () => {
+  navigate(-1);
+});
+
+arrowRight.addEventListener("click", () => {
+  navigate(1);
+});
+
 //Cette fonction gère les clics sur les flèches du carrousel défilant
-function arrows() {
-  let arrowLeft = document.querySelector(".arrow_left");
-  let arrowRight = document.querySelector(".arrow_right");
+function navigate(position) {
+  currentIndex += position;
+  if (currentIndex < 0) {
+    currentIndex = slides.length - 1;
+  } else if (currentIndex >= slides.length) {
+    currentIndex = 0;
+  }
+  const actuelIdBullet = document.querySelector(`.dots #dot${currentIndex}`);
+  document
+    .querySelectorAll(".dot")
+    .forEach((dot) => dot.classList.remove("dot_selected"));
+  actuelIdBullet.classList.add("dot_selected");
 
-  arrowLeft.addEventListener("click", () => {
-    let actuelBullet = document.querySelector(".dots .dot_selected");
-    let actuelIdBullet = actuelBullet.getAttribute("id");
-    let leftBullet;
-    if (actuelIdBullet === "0") {
-      leftBullet = document.getElementById(3);
-    } else {
-      leftBullet = document.getElementById(parseInt(actuelIdBullet) - 1);
-    }
-    let leftIdBullet = leftBullet.getAttribute("id");
-    let boxImage = document.querySelector(".banner-img");
-    let taglineImage = document.querySelector("#banner p");
-
-    taglineImage.innerHTML = slides[leftIdBullet].tagLine;
-    boxImage.setAttribute(
-      "src",
-      `assets/images/slideshow/slide${parseInt(leftIdBullet) + 1}.jpg`
-    );
-    if (boxImage.src.endsWith("slide4.jpg")) {
-      boxImage.setAttribute("src", `assets/images/slideshow/slide4.png`);
-    }
-    actuelBullet.classList.remove("dot_selected");
-    leftBullet.classList.add("dot_selected");
-  });
-
-  arrowRight.addEventListener("click", () => {
-    let actuelBullet = document.querySelector(".dots .dot_selected");
-    let actuelIdBullet = actuelBullet.getAttribute("id");
-    let rightBullet;
-    if (actuelIdBullet === "3") {
-      rightBullet = document.getElementById(0);
-    } else {
-      rightBullet = document.getElementById(parseInt(actuelIdBullet) + 1);
-    }
-
-    let rightIdBullet = rightBullet.getAttribute("id");
-    let boxImage = document.querySelector(".banner-img");
-    let taglineImage = document.querySelector("#banner p");
-
-    taglineImage.innerHTML = slides[rightIdBullet].tagLine;
-    boxImage.setAttribute(
-      "src",
-      `assets/images/slideshow/slide${parseInt(rightIdBullet) + 1}.jpg`
-    );
-    if (boxImage.src.endsWith("slide4.jpg")) {
-      boxImage.setAttribute("src", `assets/images/slideshow/slide4.png`);
-    }
-    actuelBullet.classList.remove("dot_selected");
-    rightBullet.classList.add("dot_selected");
-  });
+  taglineImage.innerHTML = slides[currentIndex].tagLine;
+  const fileName = slides[currentIndex].image;
+  boxImage.setAttribute("src", `assets/images/slideshow/${fileName}`);
 }
 
 add_bulletPoints(slides);
-arrows();
