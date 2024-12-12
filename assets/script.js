@@ -38,14 +38,6 @@ function add_bulletPoints(images) {
   imageSelected.classList.add("dot_selected");
 }
 
-arrowLeft.addEventListener("click", () => {
-  navigate(-1);
-});
-
-arrowRight.addEventListener("click", () => {
-  navigate(1);
-});
-
 //Cette fonction gère les clics sur les flèches du carrousel défilant
 function navigate(position) {
   currentIndex += position;
@@ -66,3 +58,11 @@ function navigate(position) {
 }
 
 add_bulletPoints(slides);
+
+arrowLeft.addEventListener("click", () => {
+  navigate(-1);
+});
+
+arrowRight.addEventListener("click", () => {
+  navigate(1);
+});
